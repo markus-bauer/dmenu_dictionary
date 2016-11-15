@@ -1,8 +1,4 @@
 #!/bin/bash
-# DESCRIPTION
-# general use :  grep a textfile, output to dmenu/rofi
-# SETTINGS
-# grep -E -i :   extended and ignore case is enabled
 
 dict="$1"
 
@@ -28,13 +24,13 @@ then
     p="$(echo "$p" | sed "s/i/\[\[=i=\]\]/g")"
     p="$(echo "$p" | sed "s/c/\[\[=c=\]\]/g")"
 
-    #(2) call locate with p and create dmenu from results:
-    d=$(grep -E -i "$p" $dict | sort | $DMENU)  
+    #(2) call grep with p and create dmenu from results:
+    d=$(grep -E -i "$p" $dict | sort | $DMENU)  # grep -E -i:   extended and ignore case is enabled
 fi
 
 #(3) copy to clipboard
 if [ "$d" != "" ]
 then
-    # be carefull $d can be anything you type into dmenu/rofi 
+    # be carefull, $d can be anything you type into dmenu/rofi 
     echo "$d" | xclip -selection c
 fi

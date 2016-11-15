@@ -1,6 +1,6 @@
-hello - Hallo
-Worl - Welt
+Hello - Hallo
+World - Welt
 This - Dies
 Is - ist
-an - ein 
+An - ein 
 Example - Beispiel

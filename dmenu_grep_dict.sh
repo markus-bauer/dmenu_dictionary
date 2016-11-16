@@ -15,13 +15,15 @@ p=$(echo ""| $DMENU)
 
 if [ "$p" != "" ]
 then
-    # prepare string for grep (for french dictionary: replace a,e,i,c with general equivalents to make search for accented characters easier)
+    # prepare string for grep (for french dictionary: replace a,e,i,o,u,c with general equivalents to make search for accented characters easier)
 
     DMENU="rofi -regex -location 2 -width 100 -dmenu -p select: -l 20 -i -fn Hack-10"
 
     p="$(echo "$p" | sed "s/a/\[\[=a=\]\]/g")"
     p="$(echo "$p" | sed "s/e/\[\[=e=\]\]/g")"
     p="$(echo "$p" | sed "s/i/\[\[=i=\]\]/g")"
+    p="$(echo "$p" | sed "s/o/\[\[=o=\]\]/g")"
+    p="$(echo "$p" | sed "s/u/\[\[=u=\]\]/g")"
     p="$(echo "$p" | sed "s/c/\[\[=c=\]\]/g")"
 
     #(2) call grep with p and create dmenu from results:

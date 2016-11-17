@@ -6,16 +6,16 @@ p=""
 d=""
 
 #(1) create the search string for dmenu
-#--dmenu
+#--- dmenu ---
 # DMENU="dmenu -p grep: -l 20 -i -fn Hack-10"
-#--rofi 
+#--- rofi ---
 DMENU="rofi -regex -location 2 -width 100 -dmenu -p lookup: -l 20 -i -fn Hack-10"
 
 p=$(echo ""| $DMENU)
 
 if [ "$p" != "" ]
 then
-    # prepare string for grep (for french dictionary: replace a,e,i,o,u,c with general equivalents to make search for accented characters easier)
+    # prepare string for grep (for french dictionary: replace a,e,i,o,u,c with general equivalents)
 
     DMENU="rofi -regex -location 2 -width 100 -dmenu -p select: -l 20 -i -fn Hack-10"
 

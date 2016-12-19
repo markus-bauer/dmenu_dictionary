@@ -1,13 +1,14 @@
 #!/bin/bash
-# TODO: if case for d=--- --> go back to beginning; for this: read bash functions
+
 dict="$1"
 
-
 function create_search {
+    # create the search string for dmenu
+
     p=""
-    #(1) create the search string for dmenu
     #--- dmenu ---
     # DMENU="dmenu -p grep: -l 20 -i -fn Hack-10"
+
     #--- rofi ---
     DMENU="rofi -regex -location 2 -width 100 -dmenu -p lookup: -l 20 -i -fn Hack-10"
     p=$(echo ""| $DMENU)
@@ -28,11 +29,13 @@ function search_and_show {
     p="$(echo "$p" | sed "s/c/\[cç\]/g")"
 
     echo "$p"
-    #(2) call grep with p and create dmenu from results:
+
+    # call grep with p and create dmenu from results:
     d=$(grep -E -i "$p" $dict | sort | $DMENU)  # grep -E -i:   extended and ignore case is enabled
 }
 
 function copy_to_clipboard {
+    # copy selection to clipboard
     # be carefull, $d can be anything you type into dmenu/rofi 
     echo "$d" | xclip -selection c
 }
@@ -41,8 +44,10 @@ function mainloop {
     create_search
     if [ "$p" != "" ]; 
         then search_and_show
-    else exit
+    else
+        exit
     fi
+
     if [ "$d" != "" ]; 
         then copy_to_clipboard
     else

@@ -1,38 +1,52 @@
 #!/bin/bash
-
+# TODO: if case for d=--- --> go back to beginning; for this: read bash functions
 dict="$1"
 
-p=""
-d=""
 
-#(1) create the search string for dmenu
-#--- dmenu ---
-# DMENU="dmenu -p grep: -l 20 -i -fn Hack-10"
-#--- rofi ---
-DMENU="rofi -regex -location 2 -width 100 -dmenu -p lookup: -l 20 -i -fn Hack-10"
+function create_search {
+    p=""
+    #(1) create the search string for dmenu
+    #--- dmenu ---
+    # DMENU="dmenu -p grep: -l 20 -i -fn Hack-10"
+    #--- rofi ---
+    DMENU="rofi -regex -location 2 -width 100 -dmenu -p lookup: -l 20 -i -fn Hack-10"
+    p=$(echo ""| $DMENU)
+}
 
-p=$(echo ""| $DMENU)
-
-if [ "$p" != "" ]
-then
+function search_and_show {
+    d=""
     # prepare string for grep (for french dictionary: replace a,e,i,o,u,c with general equivalents)
 
-    DMENU="rofi -regex -location 2 -width 100 -dmenu -p select: -l 20 -i -fn Hack-10"
+    DMENU="rofi -regex -location 2 -width 100 -dmenu -p results: -l 20 -i -fn Hack-10"
 
-    p="$(echo "$p" | sed "s/a/\[\[=a=\]\]/g")"
-    p="$(echo "$p" | sed "s/e/\[\[=e=\]\]/g")"
-    p="$(echo "$p" | sed "s/i/\[\[=i=\]\]/g")"
-    p="$(echo "$p" | sed "s/o/\[\[=o=\]\]/g")"
-    p="$(echo "$p" | sed "s/u/\[\[=u=\]\]/g")"
-    p="$(echo "$p" | sed "s/c/\[\[=c=\]\]/g")"
+    #p="$(echo "$p" | sed "s/a/\[\[=a=\]\]/g")"
+    p="$(echo "$p" | sed "s/a/\[aàáâäåæǎăãảȧạḁāąⱥȁấầẫẩậắằẵẳặǻǡǟȁȃ\]/g")" 
+    p="$(echo "$p" | sed "s/e/\[eèéêëěĕẽḛẻėëēȩę\]/g")"
+    p="$(echo "$p" | sed "s/i/\[iìíîï\]/g")"
+    p="$(echo "$p" | sed "s/o/\[oòóôöœ\]/g")"
+    p="$(echo "$p" | sed "s/u/\[uùúûü\]/g")"
+    p="$(echo "$p" | sed "s/c/\[cç\]/g")"
 
+    echo "$p"
     #(2) call grep with p and create dmenu from results:
     d=$(grep -E -i "$p" $dict | sort | $DMENU)  # grep -E -i:   extended and ignore case is enabled
-fi
+}
 
-#(3) copy to clipboard
-if [ "$d" != "" ]
-then
+function copy_to_clipboard {
     # be carefull, $d can be anything you type into dmenu/rofi 
     echo "$d" | xclip -selection c
-fi
+}
+
+function mainloop {
+    create_search
+    if [ "$p" != "" ]; 
+        then search_and_show
+    else exit
+    fi
+    if [ "$d" != "" ]; 
+        then copy_to_clipboard
+    else
+        mainloop
+    fi
+}
+mainloop
